@@ -7,11 +7,21 @@
 
 import UIKit
 
+public class FeedItem {
+
+}
+
+public class FeedCell: UIView {
+    
+}
+
 public class FeedView: UIScrollView {
     
     public  var topSpacing: CGFloat = 6.0
     public  var leftSpacing: CGFloat = 6.0
     private var padding: CGFloat = 0
+    private var animated = true
+    private var views: Array<UIView>!
     ///init method
     override public init(frame: CGRect) {
         super.init(frame: frame)
@@ -23,9 +33,13 @@ public class FeedView: UIScrollView {
     //layout the views!
     override public func layoutSubviews() {
         super.layoutSubviews()
+        println("contentOffset: \(self.contentOffset)")
     }
     //add views to the super view (this view).
     public func addViews(views: Array<UIView>, animated: Bool) {
+        //self.views = views
+        //self.animated = animated
+        let visibleHeight = self.frame.size.height+self.frame.size.height/2
         var leftPad = leftSpacing + padding
         var topPad = topSpacing + padding
         var top = topPad
@@ -46,7 +60,7 @@ public class FeedView: UIScrollView {
             if animated {
                 UIView.animateWithDuration(0.5, delay: delay, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5,
                     options: .TransitionNone, animations: { () -> Void in
-                    view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height)
+                        view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height)
                     }, completion: { (Bool) -> Void in
                 })
             } else {
@@ -57,6 +71,9 @@ public class FeedView: UIScrollView {
                 tallest = view.frame.size.height
             }
             delay += 0.1
+            if top > visibleHeight {
+                println("this view is hidden")
+            }
         }
         self.contentSize = CGSizeMake(self.frame.size.width, top+tallest+topPad)
     }
